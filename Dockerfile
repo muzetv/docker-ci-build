@@ -37,7 +37,7 @@ RUN set -ex \
     && ssh-keyscan -t rsa,dsa -H bitbucket.org >> ~/.ssh/known_hosts \
     && chmod 600 ~/.ssh/known_hosts \
     && apt-get install -y --no-install-recommends \
-       wget python3 python3-dev python3-pip python3-setuptools fakeroot jq \
+       sudo wget python3 python3-dev python3-pip python3-setuptools fakeroot jq \
        netbase dirmngr bzr mercurial procps \
        tar gzip zip autoconf automake \
        bzip2 file g++ gcc imagemagick \
@@ -314,6 +314,6 @@ RUN git clone https://github.com/Homebrew/brew /home/muzetv/.linuxbrew/Homebrew 
 	&& brew tap aws/tap \
 	&& brew install aws-sam-cli
 
-COPY dockerd-entrypoint.sh /usr/local/bin/
+ADD dockerd-entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT ["dockerd-entrypoint.sh"]
