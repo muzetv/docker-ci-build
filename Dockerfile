@@ -17,23 +17,14 @@ RUN set -eux; apt-get update && apt-get install -y --no-install-recommends \
 		git \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_HOME /usr/local/openjdk-11
+ENV JAVA_HOME /usr/local/openjdk-8
 ENV PATH $JAVA_HOME/bin:$PATH
 
 ENV GPG_KEY 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
 ENV PYTHON_VERSION 3.7.5
-ENV JAVA_VERSION 11.0.5
-ENV JAVA_BASE_URL https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-11.0.5%2B10/OpenJDK11U-jre_
-ENV JAVA_URL_VERSION 11.0.5_10
-
-#RUN useradd -m -s /bin/bash muzetv \
-#	&& echo 'muzetv ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
-
-#USER muzetv
-#WORKDIR /home/muzetv
-#ENV PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH \
-#	SHELL=/bin/bash \
-#	USER=muzetv
+ENV JAVA_VERSION 8u232
+ENV JAVA_BASE_URL https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u232-b09/OpenJDK8U-jre_
+ENV JAVA_URL_VERSION 8u232b09
 
 ## Java Install
 
@@ -110,7 +101,7 @@ RUN set -eux; \
 	ldconfig; \
 	\
 # basic smoke test
-	java --version
+	java -version
 
 ## Python Install
 
@@ -281,6 +272,8 @@ RUN git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebr
 	&& brew config \
 	# Install aws sam cli
 	&& brew tap aws/tap \
-	&& brew install aws-sam-cli
+	&& brew install aws-sam-cli \
+	# Install gradle
+	&& brew install gradle
 
 CMD ["python3"]
