@@ -312,6 +312,13 @@ RUN git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew \
     && brew install aws-sam-cli \
     && sam --version
 
-COPY dockerd-entrypoint.sh /usr/local/bin/
+RUN set -ex \
+    n $NODE_12_VERSION
 
-ENTRYPOINT ["dockerd-entrypoint.sh"]
+ENV JAVA_HOME="$JAVA_11_HOME" \
+    JRE_HOME="$JRE_11_HOME" \
+    JDK_HOME="$JDK_11_HOME"
+
+CMD ["/bin/bash"]
+#COPY dockerd-entrypoint.sh /usr/local/bin/
+#ENTRYPOINT ["dockerd-entrypoint.sh"]
