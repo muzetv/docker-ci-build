@@ -37,7 +37,7 @@ RUN set -ex \
     && ssh-keyscan -t rsa,dsa -H bitbucket.org >> ~/.ssh/known_hosts \
     && chmod 600 ~/.ssh/known_hosts \
     && apt-get install -y --no-install-recommends \
-       sudo wget python3 python3-dev python3-pip python3-setuptools fakeroot jq \
+       binutils clang wget python3 python3-dev python3-pip python3-setuptools fakeroot jq \
        netbase dirmngr bzr mercurial procps \
        tar gzip zip autoconf automake \
        bzip2 file g++ gcc imagemagick \
@@ -98,7 +98,7 @@ RUN set -ex \
     && pip3 install wheel
 
 RUN set -ex \
-    && pip3 install awscli boto3
+    && pip3 install awscli boto3 "localstack[full]"
 
 VOLUME /var/lib/docker
 
@@ -298,22 +298,20 @@ RUN set -ex \
    && apt-get clean
 
 # Homebrew
-RUN useradd -m -s /bin/bash muzetv \
-	&& echo 'muzetv ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
-USER muzetv
-WORKDIR /home/muzetv
 ENV LANG=en_US.UTF-8 \
-	PATH=/home/muzetv/.linuxbrew/bin:/home/muzetv/.linuxbrew/sbin:$PATH \
+	PATH=~/.linuxbrew/bin:~/.linuxbrew/sbin:$PATH \
 	SHELL=/bin/bash
 
-RUN git clone https://github.com/Homebrew/brew /home/muzetv/.linuxbrew/Homebrew \
-	&& mkdir /home/muzetv/.linuxbrew/bin \
-	&& ln -s ../Homebrew/bin/brew /home/muzetv/.linuxbrew/bin/ \
-	&& brew config \
-	# Install aws sam cli
-	&& brew tap aws/tap \
-	&& brew install aws-sam-cli
+RUN git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew \
+    && mkdir ~/.linuxbrew/bin \
+    && ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin \
+    && eval $(~/.linuxbrew/bin/brew shellenv) \
+    && brew config \
+    && brew --version \
+    && brew tap aws/tap \
+    && brew install aws-sam-cli \
+    && sam --version
 
-ADD dockerd-entrypoint.sh /usr/local/bin/
+COPY dockerd-entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT ["dockerd-entrypoint.sh"]
