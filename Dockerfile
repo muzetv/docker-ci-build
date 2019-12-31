@@ -98,7 +98,7 @@ RUN set -ex \
     && pip3 install wheel
 
 RUN set -ex \
-    && pip3 install awscli boto3 "localstack[full]"
+    && pip3 install awscli boto3 "localstack[full]" cfn-lint
 
 VOLUME /var/lib/docker
 
