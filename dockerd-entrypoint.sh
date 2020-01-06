@@ -37,4 +37,4 @@ do
 	sleep 1
 done
 
-eval "$@"
+#eval "$@"
