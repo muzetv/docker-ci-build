@@ -319,6 +319,6 @@ ENV JAVA_HOME="$JAVA_11_HOME" \
     JRE_HOME="$JRE_11_HOME" \
     JDK_HOME="$JDK_11_HOME"
 
-CMD ["/bin/bash"]
-#COPY dockerd-entrypoint.sh /usr/local/bin/
-#ENTRYPOINT ["dockerd-entrypoint.sh"]
+#CMD ["/bin/bash"]
+COPY dockerd-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["dockerd-entrypoint.sh"]
