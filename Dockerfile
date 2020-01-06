@@ -12,7 +12,6 @@ ENV PYTHON_VERSION="3.8.0" \
 ENV DOCKER_BUCKET="download.docker.com" \
     DOCKER_CHANNEL="stable" \
     DOCKER_SHA256="6e7d8e24ee46b13d7547d751696d01607d19c8224c1b2c867acc8c779e77734b" \
-    DIND_COMMIT="3b5fac462d21ca164b3778647420016315289034" \
     GITVERSION_VERSION="4.0.0" \
     DEBIAN_FRONTEND="noninteractive" \
     SRC_DIR="/usr/src"
@@ -82,9 +81,8 @@ RUN set -ex \
     && useradd -g dockremap dockremap \
     && echo 'dockremap:165536:65536' >> /etc/subuid \
     && echo 'dockremap:165536:65536' >> /etc/subgid \
-    && wget "https://raw.githubusercontent.com/docker/docker/${DIND_COMMIT}/hack/dind" -O /usr/local/bin/dind \
     && curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
-    && chmod +x /usr/local/bin/dind /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose \
 # Ensure docker-compose works
     && docker-compose version
 
@@ -319,6 +317,4 @@ ENV JAVA_HOME="$JAVA_11_HOME" \
     JRE_HOME="$JRE_11_HOME" \
     JDK_HOME="$JDK_11_HOME"
 
-#CMD ["/bin/bash"]
-COPY dockerd-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["dockerd-entrypoint.sh"]
+CMD ["/bin/bash"]
